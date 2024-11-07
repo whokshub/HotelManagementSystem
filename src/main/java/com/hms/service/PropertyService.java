@@ -6,6 +6,8 @@ import com.hms.repository.PropertyRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class PropertyService {
 
@@ -43,5 +45,13 @@ public class PropertyService {
     @Transactional
     public void deletePropertiesByLocationId(Long locationId) {
         propertyRepository.deleteByLocationId(locationId);
+    }
+
+    public List<Property> searchHotelByLocation(String name) {
+
+        List<Property> list = propertyRepository.searchHotels(name);
+
+        return list;
+
     }
 }

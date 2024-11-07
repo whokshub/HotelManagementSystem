@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/property")
 public class PropertyController {
@@ -66,6 +68,12 @@ public class PropertyController {
         return new ResponseEntity<>("PropertyDeleted",HttpStatus.OK);
     }
 
+    @GetMapping("/searchHotels")
+    public List<Property> searchHotels(@RequestParam String name){
 
+        List<Property> list = service.searchHotelByLocation(name);
+
+        return list;
+    }
 
 }
