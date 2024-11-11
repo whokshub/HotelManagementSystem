@@ -9,6 +9,7 @@ import com.hms.repository.LocationRepository;
 import com.hms.repository.PropertyRepository;
 import com.hms.repository.StateRepository;
 import com.hms.service.PropertyService;
+import com.hms.service.ReviewService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,13 +26,15 @@ public class PropertyController {
     private CountryRepository countryRepository;
     private StateRepository stateRepository;
     private PropertyRepository repository;
+    private ReviewService reviewService;
 
-    public PropertyController(PropertyService service, LocationRepository locationRepository, CountryRepository countryRepository, StateRepository stateRepository, PropertyRepository repository) {
+    public PropertyController(PropertyService service, LocationRepository locationRepository, CountryRepository countryRepository, StateRepository stateRepository, PropertyRepository repository, ReviewService reviewService) {
         this.service = service;
         this.locationRepository = locationRepository;
         this.countryRepository = countryRepository;
         this.stateRepository = stateRepository;
         this.repository = repository;
+        this.reviewService = reviewService;
     }
 
     //for adding properties
@@ -62,7 +65,10 @@ public class PropertyController {
         if (!repository.existsById(propertyId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Country not found");
         }
+        //delete all reviews related to this property id
+        reviewService.deleteReviewsByPropertyId(propertyId);
 
+        //delete all properties by propertyId
         service.deletePropertyById(propertyId);
 
         return new ResponseEntity<>("PropertyDeleted",HttpStatus.OK);

@@ -19,8 +19,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
+
         //h(cd)2
         http.csrf().disable().cors().disable();
+        //csrf disable reason -
+        //cors disable reason
 
         http.addFilterBefore(jwtFilter, AuthorizationFilter.class);
 

@@ -39,13 +39,13 @@ public class JWTFilter extends OncePerRequestFilter {
             ) throws ServletException, IOException {
         String bearToken = request.getHeader("Authorization");
 
-        System.out.println(bearToken);
+        //System.out.println(bearToken); //cors origin - method type
 
         if(bearToken!=null && bearToken.startsWith("Bearer ")){
             String token = bearToken.substring(8, bearToken.length() - 1);
             //System.out.println(token);
             String username = jwtService.getUsername(token);
-            System.out.println(username);
+            //System.out.println(username);
 
             Optional<AppUser> optUsername = userRepository.findByUserName(username);
 
@@ -58,7 +58,7 @@ public class JWTFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(
                                 appUser,
                                 null,
-                                Collections.singleton(new SimpleGrantedAuthority(appUser.getRole())));
+                                Collections.singleton(new SimpleGrantedAuthority(appUser.getRole()))); // singleton reason -
 
                 authenticationToken.setDetails(new WebAuthenticationDetails(request));
 

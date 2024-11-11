@@ -51,9 +51,10 @@ public class CountryController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Country not found");
         }
 
+        
+
         // Delete all properties related to the country
         propertyService.deletePropertiesByCountryId(countryId);
-
 
         // Delete the country itself
         countryService.deleteCountryById(countryId);

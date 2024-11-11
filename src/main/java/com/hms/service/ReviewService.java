@@ -6,6 +6,7 @@ import com.hms.entity.Review;
 import com.hms.repository.PropertyRepository;
 import com.hms.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -57,5 +58,9 @@ public class ReviewService {
 
     public void deleteReviews(Long id) {
         reviewRepository.deleteById(id);
+    }
+    @Transactional
+    public void deleteReviewsByPropertyId(Long propertyId) {
+        reviewRepository.deleteByPropertyId(propertyId);
     }
 }

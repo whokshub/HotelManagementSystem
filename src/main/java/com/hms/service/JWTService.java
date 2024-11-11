@@ -24,26 +24,31 @@ public class JWTService {
 
     private Algorithm algorithm;
 
-    @PostConstruct
+    @PostConstruct  //autoload on every run(execution of the project)
     public void postConstruct(){
 //        System.out.println(algorithmKey);
 //        System.out.println(issuer);
 //        System.out.println(expiryTime);
         algorithm = Algorithm.HMAC256(algorithmKey);
     }
+
     public String generateToken(String userName){
 
+//  JWT-with(Computer(claim)Engineer(expiresAt)Is(Issuer)Sick(sign))
        return JWT.create()
                .withClaim("name",userName)
                .withExpiresAt(new Date(System.currentTimeMillis()+expiryTime))
                .withIssuer(issuer)
                .sign(algorithm);
-
     }
 
         public String getUsername(String token){
 
-            DecodedJWT decodedJwt = JWT.require(algorithm).withIssuer(issuer).build().verify(token);
+        //JWT-(Revenegers(require)Will-I(withIssuer)Bring(build)Victory(verify))
+            DecodedJWT decodedJwt = JWT.require(algorithm)
+                                        .withIssuer(issuer)
+                                        .build()
+                                        .verify(token);
             return decodedJwt.getClaim("name").asString();
 
         }
