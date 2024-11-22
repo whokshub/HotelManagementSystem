@@ -1,5 +1,6 @@
 package com.hms.controller;
 
+import com.hms.entity.AppUser;
 import com.hms.entity.Booking;
 import com.hms.entity.Property;
 import com.hms.service.BookingService;
@@ -7,6 +8,7 @@ import com.hms.service.PDFService;
 import com.hms.service.PropertyService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,10 +25,11 @@ public class BookingController {
     public ResponseEntity<?> createBooking(
             @RequestParam Long propertyId,
             @RequestBody Booking booking,
-            @RequestParam String type
+            @RequestParam String type,
+            @AuthenticationPrincipal AppUser appUser
             ){
 
-       String bookingCreated = bookingService.createBooking(propertyId, booking, type);
+       String bookingCreated = bookingService.createBooking(propertyId, booking, type,appUser);
 
         return new ResponseEntity<>(bookingCreated, HttpStatus.OK);
 
