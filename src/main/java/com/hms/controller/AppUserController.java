@@ -5,6 +5,7 @@ import com.hms.payload.LogInDto;
 import com.hms.payload.TokenDto;
 import com.hms.repository.AppUserRepository;
 import com.hms.service.AppUserService;
+import com.hms.service.OTPService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -51,7 +52,8 @@ public class AppUserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> logIn(@RequestBody LogInDto dto){
-        String token = appUserService.verifyLogin(dto);
+
+        String token = appUserService.verifyLoginByUserNameAndPassword(dto);
 
         if(token!=null){
 
@@ -86,5 +88,36 @@ public class AppUserController {
         AppUser saved = appUserRepo.save(appUser);
 
         return new ResponseEntity<>(saved,HttpStatus.CREATED);
+    }
+
+    //otp based logics
+    @PostMapping("/login-otp")
+    public String otpLogin(@RequestParam String mobile){
+
+        //chaecking the mobile nulber is in our db then generate otp and send via sms
+        String status = appUserService.checkMobileAndGenerateAndSendOtp(mobile);
+
+        return  status;
+
+    }
+
+    @PostMapping("/validate-otp")
+    public ResponseEntity<?> verifyOTP(@RequestParam String mobile, @RequestParam String otp){
+
+        String token = appUserService.verifyLoginByMobileAndOTP(mobile, otp);
+
+        if(token!=null){
+
+            TokenDto tokenDto = new TokenDto();
+
+            tokenDto.setToken(token);
+            tokenDto.setType("JWT");
+            //return new ResponseEntity<>("User Logged in and the token is : "+tokenDto, HttpStatus.OK);
+            return new ResponseEntity<>(tokenDto, HttpStatus.OK);
+
+        }else{
+            return new ResponseEntity<>("Invalid Username/password", HttpStatus.FORBIDDEN);
+        }
+
     }
 }

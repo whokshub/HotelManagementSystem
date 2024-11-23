@@ -73,7 +73,7 @@ public class BookingService {
         pdfService.generateBookingPDF(booking);
         String toPhoneNumber = "+91" + booking.getMobile();
         smsService.sendSMS(toPhoneNumber,"Your booking have been done, your booking number is : "+booking.getId());
-        //smsService.sendWhatsAppMessage(booking.getMobile(),"Your booking have been done, your booking number is : "+booking.getId());
+        smsService.sendWhatsAppMessage(booking.getMobile(),"Your booking have been done, your booking number is : "+booking.getId());
 
         return "Booking generated";
 
